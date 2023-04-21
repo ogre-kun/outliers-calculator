@@ -30,7 +30,7 @@ namespace Lib_OutliersCalculator
         /// <summary>
         /// The steps performed for the Q-Dixon analysis
         /// </summary>
-        public List<QDixonStep> Steps { get; private set; }
+        public List<QDixonStep> Steps { get; private set; } = new List<QDixonStep>();
 
         /// <summary>
         /// Critical value for N (count) of data. Based on the Q-dixon table
@@ -81,7 +81,7 @@ namespace Lib_OutliersCalculator
 
             //Throw exception when N is not in input critical value table
             if (critvalue_table.ContainsKey(data.Count) == false)
-                throw new ArgumentException("Critical value table does not countain entry for count of input data (N)");
+                throw new ArgumentException("Critical value table does not contain entry for count of input data (N)");
 
             data_array = data.ToArray();
             data_array_sorted = data.OrderBy(x => x).ToArray<decimal>();
@@ -89,7 +89,7 @@ namespace Lib_OutliersCalculator
             data_count = data.Count();
 
             //Execute the QDixon test
-            ExecuteQDixon(data_array_sorted, new List<decimal>());
+            RunQDixon(data_array_sorted, new List<decimal>());
         }
 
         /// <summary>
@@ -102,14 +102,14 @@ namespace Lib_OutliersCalculator
         }
 
         /// <summary>
-        /// Executes the Q-Dixon test and populates the Outliers list and final 
+        /// Executes the Q-Dixon test and populates the Outliers list and final set
         /// </summary>
         /// <param name="sorted_data">the input data that is sorted</param>
         /// <param name="outliers">container for the outliers</param>
-        private void ExecuteQDixon(decimal[] sorted_data, List<decimal> outliers)
+        private void RunQDixon(decimal[] sorted_data, List<decimal> outliers)
         {
-            var N = sorted_data.Length;
-            var crit_value = criticalvalue_table[N];
+            var N = sorted_data.Length - 1;
+            var crit_value = criticalvalue_table[sorted_data.Length];
             var low_test_val = Test(TestType.Low, sorted_data);
             var high_test_val = Test(TestType.High, sorted_data);
             decimal[] new_data_array;
@@ -118,64 +118,47 @@ namespace Lib_OutliersCalculator
             {
                 outliers.Add(sorted_data[0]);
                 outliers.Add(sorted_data[N]);
-                new_data_array = RemoveFirstLast(sorted_data);
-                Steps.Add(new QDixonStep("high-low", new_data_array, new List<decimal>() { sorted_data[0], sorted_data[N] }));
-                ExecuteQDixon(new_data_array, outliers);
+                new_data_array = RemoveItems(sorted_data, true, true);
+                SortedFinalSet = new_data_array.ToList<decimal>();
+                Steps.Add(new QDixonStep("high-low", new_data_array, new List<decimal>() { sorted_data[0], sorted_data[N] }, 
+                    low_test_val, high_test_val, crit_value));
+                RunQDixon(new_data_array, outliers);
             } else if (low_test_val >= crit_value)
             {
                 outliers.Add(sorted_data[0]);
-                new_data_array = RemoveFirst(sorted_data);
-                Steps.Add(new QDixonStep("low", new_data_array, new List<decimal>() { sorted_data[0] }));
-                ExecuteQDixon(new_data_array, outliers);
+                new_data_array = RemoveItems(sorted_data, true, false);
+                SortedFinalSet = new_data_array.ToList<decimal>();
+                Steps.Add(new QDixonStep("low", new_data_array, new List<decimal>() { sorted_data[0] }, 
+                    low_test_val, high_test_val, crit_value));
+                RunQDixon(new_data_array, outliers);
             } else if (high_test_val >= crit_value)
             {
                 outliers.Add(sorted_data[N]);
-                new_data_array = RemoveLast(sorted_data);
-                Steps.Add(new QDixonStep("high", new_data_array, new List<decimal>() { sorted_data[N] }));
-                ExecuteQDixon(new_data_array, outliers);
+                new_data_array = RemoveItems(sorted_data, false, true);
+                SortedFinalSet = new_data_array.ToList<decimal>();
+                Steps.Add(new QDixonStep("high", new_data_array, new List<decimal>() { sorted_data[N] }, 
+                    low_test_val, high_test_val, crit_value));
+                RunQDixon(new_data_array, outliers);
             }
             Outliers = outliers;
-            SortedFinalSet = sorted_data.ToList<decimal>();
             return;
         }
 
         /// <summary>
-        /// Removes the first and last item in an array
+        /// Removes the first and/or last items in an array
         /// </summary>
-        /// <param name="array"></param>
-        /// <returns>Copy of the array with first and last items removed</returns>
-        private decimal[] RemoveFirstLast(decimal[] array)
+        /// <param name="array">the input array</param>
+        /// <param name="removeFirst">if true, removes the first item</param>
+        /// <param name="removeLast">if true, removes the last item</param>
+        /// <returns>a copy of the array with the specified items removed</returns>
+        private decimal[] RemoveItems(decimal[] array, bool removeFirst, bool removeLast)
         {
-            decimal[] result = new decimal[array.Length - 2];
-            Array.Copy(array, 1, result, 0, result.Length);
+            int startIndex = removeFirst ? 1 : 0;
+            int endIndex = removeLast ? array.Length - 1 : array.Length;
+            decimal[] result = new decimal[endIndex - startIndex];
+            Array.Copy(array, startIndex, result, 0, result.Length);
             return result;
         }
-
-
-        /// <summary>
-        /// Removes the first item in the array
-        /// </summary>
-        /// <param name="array"></param>
-        /// <returns>Copy of the array with the first item removed</returns>
-        private decimal[] RemoveFirst(decimal[] array)
-        {
-            decimal[] result = new decimal[array.Length -1];
-            Array.Copy(array, 1, result, 0, array.Length - 1);
-            return result;
-        }
-
-        /// <summary>
-        /// Removes the last item in the array
-        /// </summary>
-        /// <param name="array"></param>
-        /// <returns>Copy of the array with the last item removed</returns>
-        private decimal[] RemoveLast(decimal[] array)
-        {
-            decimal[] result = new decimal[array.Length - 1];
-            Array.Copy(array, result, result.Length);
-            return result;
-        }
-
 
         /// <summary>
         /// Returns the value to be compared to the critical number
@@ -186,7 +169,7 @@ namespace Lib_OutliersCalculator
         private decimal Test(TestType testType, decimal[] sorted_data_array)
         {
             var len = sorted_data_array.Length;
-            var indx = GetIndexes(testType, len);
+            var indx = GetIndexes(testType, len - 1);
             var nume = (sorted_data_array[indx[0]] - sorted_data_array[indx[1]]);
             var deno = (sorted_data_array[indx[2]] - sorted_data_array[indx[3]]);
             return nume / deno;
@@ -196,7 +179,7 @@ namespace Lib_OutliersCalculator
         /// Gets the indexes or positions of the data to be used in the test
         /// </summary>
         /// <param name="testType">Type of test either low or high</param>
-        /// <param name="N">Populaiton count</param>
+        /// <param name="N">Population count</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException">Occurs when the case for test is not found</exception>
         private int[] GetIndexes(TestType testType, int N)

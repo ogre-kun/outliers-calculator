@@ -112,7 +112,7 @@ namespace Lib_OutliersCalculator
             var crit_value = criticalvalue_table[sorted_data.Length];
             var low_test_val = Test(TestType.Low, sorted_data);
             var high_test_val = Test(TestType.High, sorted_data);
-            decimal[] new_data_array;
+            decimal[] new_data_array = null;
 
             if(low_test_val >= crit_value && high_test_val >= crit_value)
             {

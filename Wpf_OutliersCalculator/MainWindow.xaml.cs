@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf_OutliersCalculator.ViewModels;
 
 namespace Wpf_OutliersCalculator
 {
@@ -23,6 +24,22 @@ namespace Wpf_OutliersCalculator
         public MainWindow()
         {
             InitializeComponent();
+
+            var qdixonVM = this.Resources["QDixonVM"] as QDixonViewModel;
+            if(qdixonVM != null)
+            {
+                qdixonVM.ErrorOccurred += ViewModel_ErrorOccurred;
+            }
+
+        }
+
+        /// <summary>
+        /// Shows a message box with details of the error from the view model
+        /// </summary>
+        /// <param name="errormsg"></param>
+        private void ViewModel_ErrorOccurred(string errormsg)
+        {
+            MessageBox.Show(errormsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

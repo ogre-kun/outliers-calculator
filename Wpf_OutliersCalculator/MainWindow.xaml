@@ -4,8 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpf_OutliersCalculator"
+        xmlns:viewmodels="clr-namespace:Wpf_OutliersCalculator.ViewModels"
         mc:Ignorable="d"
+        Icon="Icons/outlier.ico"
         Title="Outliers Calculator" Height="450" Width="400" Background="#F5F5F5">
+
+    <Window.Resources>
+        <viewmodels:QDixonViewModel x:Key="QDixonVM"/>
+    </Window.Resources>
+
+
+    <!--<Window.Resources>
+        <viewmodels:QDixonViewModel x:Key="QDixonVM"/>
+    </Window.Resources>-->
     <!-- Rest of your window content -->    
     <Grid>
         <Grid.ColumnDefinitions>
@@ -19,7 +30,7 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <TabControl Grid.Row="1" Grid.Column="1">
-            <TabItem Header="Q-Dixon" Width="75">
+            <TabItem Header="Q-Dixon" Width="75" DataContext="{StaticResource QDixonVM}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="22"/>
@@ -28,7 +39,7 @@
                         <RowDefinition Height="50"/>                        
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Margin="5 5 5 0" FontWeight="DemiBold">Data</TextBlock>
-                    <TextBox Grid.Row="1" Margin="5 0 5 0" TextWrapping="Wrap"></TextBox>
+                    <TextBox Grid.Row="1" Margin="5 0 5 0" TextWrapping="Wrap" Text="{Binding InputDataSet, Mode=TwoWay}"></TextBox>
                     <Grid Grid.Row="2" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -40,7 +51,7 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" FontWeight="DemiBold">Outliers</TextBlock>
-                            <TextBox Grid.Row="1" IsEnabled="False" TextWrapping="Wrap"></TextBox>
+                            <TextBox Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding Outliers, Mode=OneWay}"></TextBox>
                         </Grid>
                         <Grid Grid.Column="1" Margin="5">
                             <Grid.RowDefinitions>
@@ -48,7 +59,7 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" FontWeight="DemiBold">New Data</TextBlock>
-                            <TextBox Grid.Row="1" IsEnabled="False" TextWrapping="Wrap"></TextBox>
+                            <TextBox Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding NewDataSet, Mode=OneWay}"></TextBox>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="3">
@@ -56,8 +67,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>                            
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Margin="5 10 5 10">Calculate</Button>
-                        <Button Grid.Column="1" Margin="5 10 5 10">Reset</Button>                        
+                        <Button Grid.Column="0" Margin="5 10 5 10" Command="{Binding CalculateCommand}">Calculate</Button>
+                        <Button Grid.Column="1" Margin="5 10 5 10" Command="{Binding ResetCommand}">Reset</Button>                        
                     </Grid>
                 </Grid>
             </TabItem>

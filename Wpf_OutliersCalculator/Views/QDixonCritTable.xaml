@@ -1,0 +1,18 @@
+﻿<Window x:Class="Wpf_OutliersCalculator.Views.QDixonCritTable"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wpf_OutliersCalculator.Views"
+        xmlns:viewmodel="clr-namespace:Wpf_OutliersCalculator.ViewModels"
+        mc:Ignorable="d"
+        Title="Critical Table" Height="400" Width="220">
+    <Grid>
+        <DataGrid IsReadOnly="True" Margin="20" x:Name="DataG" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="N" Width="50" Binding="{Binding N}"/>
+                <DataGridTextColumn Header="Crit. Value" Width="90" Binding="{Binding Value}"/>                
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

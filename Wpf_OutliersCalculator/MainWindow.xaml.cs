@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using Wpf_OutliersCalculator.ViewModels;
+using Wpf_OutliersCalculator.Views;
 
 namespace Wpf_OutliersCalculator
 {
@@ -21,16 +9,19 @@ namespace Wpf_OutliersCalculator
     /// </summary>
     public partial class MainWindow : Window
     {
+        private QDixonViewModel? qdixonVM;
+        private QDixonCriticalTableViewModel? qdixonCriticalTableVM;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            var qdixonVM = this.Resources["QDixonVM"] as QDixonViewModel;
+            qdixonVM = this.Resources["QDixonVM"] as QDixonViewModel;
             if(qdixonVM != null)
             {
                 qdixonVM.ErrorOccurred += ViewModel_ErrorOccurred;
+                qdixonVM.ShowCriticalTableClicked += ViewModel_ShowCriticalTableClicked;
             }
-
         }
 
         /// <summary>
@@ -40,6 +31,30 @@ namespace Wpf_OutliersCalculator
         private void ViewModel_ErrorOccurred(string errormsg)
         {
             MessageBox.Show(errormsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+
+        /// <summary>
+        /// Opens a new window for the QDixon Critical table, triggered when the button is clicked
+        /// </summary>
+        private void ViewModel_ShowCriticalTableClicked()
+        {
+            var critTableWindow = new QDixonCritTable();
+            var critTable = qdixonVM?.ModelQDixon?.CriticalTable;
+
+            critTableWindow.Owner = this;
+
+            //Set location of crit table window
+            double offsetX = 0;
+            double offsetY = 0;
+            critTableWindow.Left = offsetX + this.Left + this.Width;
+            critTableWindow.Top = offsetY + this.Top;
+
+            qdixonCriticalTableVM = new QDixonCriticalTableViewModel(critTable);
+            critTableWindow.DataG.ItemsSource = qdixonCriticalTableVM.CriticalValueTable;
+
+            //Open window as modal
+            critTableWindow.ShowDialog();
         }
     }
 }

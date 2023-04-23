@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_OutliersCalculator
+﻿namespace Lib_OutliersCalculator
 {
     public class QDixon
     {
@@ -38,6 +32,17 @@ namespace Lib_OutliersCalculator
         public decimal CriticalValue => criticalvalue_table[data_count];
 
         /// <summary>
+        /// Critical value table
+        /// </summary>
+        public Dictionary<int, decimal> CriticalTable 
+        { 
+            get
+            {
+                return default_crittable;
+            }
+        }
+
+        /// <summary>
         /// List of the outliers
         /// </summary>
         public List<decimal>? Outliers { get; private set; } = null;
@@ -58,7 +63,7 @@ namespace Lib_OutliersCalculator
                 {
                     throw new ArgumentException("The final sorted data cannot be null or of length zero.");
                 }
-                return SortedFinalSet.Average();
+                return Math.Round(SortedFinalSet.Average(), 3);
             }
         }
 
@@ -77,11 +82,11 @@ namespace Lib_OutliersCalculator
         {
             //Throw exception if data count is greater than 30 or less than 3
             if (data.Count < 3 || data.Count > 30)
-                throw new ArgumentException("Input data should be of length less than 30 and greater than 3");
+                throw new ArgumentException($"Input data should be of length less than 30 and greater than 3. Current data count = {data.Count}");
 
             //Throw exception when N is not in input critical value table
             if (critvalue_table.ContainsKey(data.Count) == false)
-                throw new ArgumentException("Critical value table does not contain entry for count of input data (N)");
+                throw new ArgumentException($"Critical value table does not contain entry for count of input data ({data.Count})");
 
             data_array = data.ToArray();
             data_array_sorted = data.OrderBy(x => x).ToArray<decimal>();

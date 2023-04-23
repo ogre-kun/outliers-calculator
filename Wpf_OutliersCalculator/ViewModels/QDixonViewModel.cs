@@ -4,8 +4,6 @@ using Lib_OutliersCalculator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 
 namespace Wpf_OutliersCalculator.ViewModels
@@ -13,10 +11,12 @@ namespace Wpf_OutliersCalculator.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class QDixonViewModel : INotifyPropertyChanged
     {
+        private QDixon? modelQDixon = null;
+
         /// <summary>
         /// QDixon object as model
         /// </summary>
-        private QDixon? modelQDixon = null;
+        public QDixon? ModelQDixon => modelQDixon;
 
         /// <summary>
         /// Data set as input in the view
@@ -32,6 +32,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// Event handler for errors
         /// </summary>
         public event Action<string>? ErrorOccurred;
+
+        /// <summary>
+        /// Raised event to show the critical event button is clicked
+        /// </summary>
+        public event Action? ShowCriticalTableClicked;
 
         /// <summary>
         /// Outliers as string
@@ -50,6 +55,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// Whether to enable the steps button depending on the data in steps list
         /// </summary>
         public bool StepsEnabled => modelQDixon?.Steps.Count > 0;
+
+        /// <summary>
+        /// Whether to enable or disable the Critical Table button
+        /// </summary>
+        public bool CritTableButtonEnabled => modelQDixon != null;
 
         /// <summary>
         /// Average of the new data set;
@@ -76,6 +86,7 @@ namespace Wpf_OutliersCalculator.ViewModels
         {
             CalculateCommand = new QDixonCommand(Calculate);
             ResetCommand = new QDixonCommand(Reset);
+            ShowCriticalTableCommand = new QDixonCommand(ShowCriticalTable);
         }
 
         /// <summary>
@@ -87,6 +98,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// Command to reset the QDixon data
         /// </summary>
         public QDixonCommand ResetCommand { get; private set; }
+
+        /// <summary>
+        /// Command to show the critical table
+        /// </summary>
+        public QDixonCommand ShowCriticalTableCommand { get; private set; }
 
         /// <summary>
         /// Convert the data in the input text box to list of decimal for consumption of the QDixon calculator
@@ -159,6 +175,15 @@ namespace Wpf_OutliersCalculator.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Outliers)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepsEnabled)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NewDataSetAverage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CritTableButtonEnabled)));
+        }
+
+        /// <summary>
+        /// Handler for show critical table command
+        /// </summary>
+        private void ShowCriticalTable()
+        {
+            ShowCriticalTableClicked?.Invoke();
         }
     }
 }

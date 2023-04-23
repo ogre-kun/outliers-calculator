@@ -47,6 +47,16 @@ namespace Wpf_OutliersCalculator.ViewModels
         }
 
         /// <summary>
+        /// Whether to enable the steps button depending on the data in steps list
+        /// </summary>
+        public bool StepsEnabled => modelQDixon?.Steps.Count > 0;
+
+        /// <summary>
+        /// Average of the new data set;
+        /// </summary>
+        public string NewDataSetAverage => modelQDixon?.FinalAverage.ToString();
+
+        /// <summary>
         /// New data set after removing the outliers as string
         /// </summary>
         public string NewDataSet
@@ -112,8 +122,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             {
                 var dataList = ConvertInput();
                 modelQDixon = new QDixon(dataList);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NewDataSet)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Outliers)));
+                PropertyChanges();
             }
             catch (Exception e)
             {
@@ -128,8 +137,7 @@ namespace Wpf_OutliersCalculator.ViewModels
         {
             modelQDixon = null;
             InputDataSet = string.Empty;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NewDataSet)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Outliers)));
+            PropertyChanges();
         }
 
 
@@ -140,6 +148,17 @@ namespace Wpf_OutliersCalculator.ViewModels
         private void OnErrorOccurred(string errorMessage)
         {
             ErrorOccurred?.Invoke(errorMessage);
+        }
+
+        /// <summary>
+        /// Contains all property changes invocations
+        /// </summary>
+        private void PropertyChanges()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NewDataSet)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Outliers)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepsEnabled)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NewDataSetAverage)));
         }
     }
 }

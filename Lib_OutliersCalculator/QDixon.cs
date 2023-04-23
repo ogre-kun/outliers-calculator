@@ -114,6 +114,8 @@ namespace Lib_OutliersCalculator
             var high_test_val = Test(TestType.High, sorted_data);
             decimal[] new_data_array = null;
 
+            SortedFinalSet = sorted_data.ToList<decimal>();
+
             if(low_test_val >= crit_value && high_test_val >= crit_value)
             {
                 outliers.Add(sorted_data[0]);

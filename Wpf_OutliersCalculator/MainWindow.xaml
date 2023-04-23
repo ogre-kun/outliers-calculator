@@ -38,14 +38,19 @@
                         <RowDefinition Height="3*"/>
                         <RowDefinition Height="50"/>                        
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Margin="5 5 5 0" FontWeight="DemiBold">Data</TextBlock>
+                    <TextBlock Grid.Row="0" Margin="5 5 5 0" FontWeight="DemiBold">Data Set</TextBlock>
                     <TextBox Grid.Row="1" Margin="5 0 5 0" TextWrapping="Wrap" Text="{Binding InputDataSet, Mode=TwoWay}"></TextBox>
                     <Grid Grid.Row="2" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>                            
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Column="0" Margin="5" Grid.RowSpan="2">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="23"/>
                                 <RowDefinition Height="*"/>
@@ -53,22 +58,34 @@
                             <TextBlock Grid.Row="0" FontWeight="DemiBold">Outliers</TextBlock>
                             <TextBox Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding Outliers, Mode=OneWay}"></TextBox>
                         </Grid>
-                        <Grid Grid.Column="1" Margin="5">
+                        <Grid Grid.Column="0" Grid.Row="2" Margin="5 " Grid.RowSpan="2">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="23"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" FontWeight="DemiBold">New Data</TextBlock>
+                            <TextBlock Grid.Row="0" FontWeight="DemiBold">New Data Set Average</TextBlock>
+                            <TextBox Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding NewDataSetAverage, Mode=OneWay}"></TextBox>
+                        </Grid>
+                        <Grid Grid.Column="1" Margin="5" Grid.RowSpan="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="23"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" FontWeight="DemiBold">New Data Set</TextBlock>
                             <TextBox Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding NewDataSet, Mode=OneWay}"></TextBox>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>                            
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Margin="5 10 5 10" Command="{Binding CalculateCommand}">Calculate</Button>
-                        <Button Grid.Column="1" Margin="5 10 5 10" Command="{Binding ResetCommand}">Reset</Button>                        
+                        <Button Grid.Column="1" Margin="5 10 5 10" IsEnabled="{Binding StepsEnabled}">Steps</Button>
+                        <Button Grid.Column="2" Margin="5 10 5 10" IsEnabled="False">Critical Table</Button>
+                        <Button Grid.Column="3" Margin="5 10 5 10" Command="{Binding ResetCommand}">Reset</Button>                        
                     </Grid>
                 </Grid>
             </TabItem>

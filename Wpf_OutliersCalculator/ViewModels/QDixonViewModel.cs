@@ -117,9 +117,10 @@ namespace Wpf_OutliersCalculator.ViewModels
 
             try
             {
+                char[] delimiters = { ',',' ' };
                 return InputDataSet.
                         Trim().
-                        Split(',').
+                        Split(delimiters).
                         Select(x => decimal.Parse(x)).
                         ToList<decimal>();
             }

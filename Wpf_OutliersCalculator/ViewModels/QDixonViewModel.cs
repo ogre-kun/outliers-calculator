@@ -1,5 +1,4 @@
-﻿using PropertyChanged;
-using Wpf_OutliersCalculator.Helpers;
+﻿using Wpf_OutliersCalculator.Helpers;
 using Lib_OutliersCalculator;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,6 @@ using System.ComponentModel;
 
 namespace Wpf_OutliersCalculator.ViewModels
 {
-    [AddINotifyPropertyChangedInterface]
     public class QDixonViewModel : INotifyPropertyChanged
     {
         private QDixon? modelQDixon = null;

@@ -1,10 +1,8 @@
-﻿using PropertyChanged;
-using Wpf_OutliersCalculator.Helpers;
+﻿using Wpf_OutliersCalculator.Helpers;
 using System.Collections.Generic;
 
 namespace Wpf_OutliersCalculator.ViewModels
 {
-    [AddINotifyPropertyChangedInterface]
     public class QDixonCriticalTableViewModel
     {
         private Dictionary<int, decimal> criticalValueTable;

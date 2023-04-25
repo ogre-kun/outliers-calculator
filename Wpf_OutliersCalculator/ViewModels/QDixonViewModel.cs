@@ -45,7 +45,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             {
                 if (modelQDixon == null || modelQDixon.Outliers == null || modelQDixon.Outliers.Count == 0)
                     return string.Empty;
-                return string.Join(", ", modelQDixon.Outliers.Select(x => x.ToString()));
+                return string.Join(",", modelQDixon.Outliers.Select(x => x.ToString()));
             }
         }
 
@@ -73,7 +73,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             {
                 if (modelQDixon == null || modelQDixon.SortedFinalSet == null)
                     return string.Empty;
-                return string.Join(", ", modelQDixon.SortedFinalSet.Select(x => x.ToString()));
+                return string.Join(",", modelQDixon.SortedFinalSet.Select(x => x.ToString()));
             }
         }
 
@@ -122,7 +122,7 @@ namespace Wpf_OutliersCalculator.ViewModels
                         Select(x => decimal.Parse(x)).
                         ToList<decimal>();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw new Exception("Input data error.");
             }        
@@ -175,6 +175,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StepsEnabled)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NewDataSetAverage)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CritTableButtonEnabled)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputDataSet)));
         }
 
         /// <summary>

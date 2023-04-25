@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Wpf_OutliersCalculator.Views"
         xmlns:viewmodel="clr-namespace:Wpf_OutliersCalculator.ViewModels"
         mc:Ignorable="d"
-        Title="Critical Table" Height="400" Width="220">
+        Title="Critical Table" Height="450" Width="220">
     <Grid>
         <DataGrid IsReadOnly="True" Margin="20" x:Name="DataG" AutoGenerateColumns="False">
             <DataGrid.Columns>

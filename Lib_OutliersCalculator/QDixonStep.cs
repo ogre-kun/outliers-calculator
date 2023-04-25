@@ -13,6 +13,11 @@
         public decimal[] IntermediateArray { get; private set; }
 
         /// <summary>
+        /// Returns the new N after removing outliers
+        /// </summary>
+        public int NNew => IntermediateArray.Count<decimal>();
+
+        /// <summary>
         /// The outliers produced during this step
         /// </summary>
         public List<decimal> IntermediateOutliers { get; private set; }

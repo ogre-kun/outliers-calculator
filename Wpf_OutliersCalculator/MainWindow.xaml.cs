@@ -11,6 +11,7 @@ namespace Wpf_OutliersCalculator
     {
         private QDixonViewModel? qdixonVM;
         private QDixonCriticalTableViewModel? qdixonCriticalTableVM;
+        private QDixonStepsViewModel? qdixonStepsVM;
 
         public MainWindow()
         {
@@ -21,6 +22,7 @@ namespace Wpf_OutliersCalculator
             {
                 qdixonVM.ErrorOccurred += ViewModel_ErrorOccurred;
                 qdixonVM.ShowCriticalTableClicked += ViewModel_ShowCriticalTableClicked;
+                qdixonVM.ShowStepsClicked += ViewModel_ShowStepsTableClicked;
             }
         }
 
@@ -55,6 +57,29 @@ namespace Wpf_OutliersCalculator
 
             //Open window as modal
             critTableWindow.ShowDialog();
+        }
+
+
+        /// <summary>
+        /// Opens an new window when the show steps button is clicked
+        /// </summary>
+        private void ViewModel_ShowStepsTableClicked()
+        {
+            var stepsWindow = new QDixonSteps();
+            var steps = qdixonVM?.ModelQDixon?.Steps;
+
+            stepsWindow.Owner = this;
+
+            //Set location of crit table window
+            double offsetX = 0;
+            double offsetY = 0;
+            stepsWindow.Left = offsetX + this.Left + this.Width;
+            stepsWindow.Top = offsetY + this.Top;
+
+            qdixonStepsVM = new QDixonStepsViewModel(steps);
+            stepsWindow.StepsTable.ItemsSource = qdixonStepsVM.StepsTable.DefaultView;
+
+            stepsWindow.ShowDialog();
         }
     }
 }

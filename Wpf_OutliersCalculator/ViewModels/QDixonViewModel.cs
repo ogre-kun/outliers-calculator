@@ -37,6 +37,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         public event Action? ShowCriticalTableClicked;
 
         /// <summary>
+        /// Raised event when the click show steps button is clicked
+        /// </summary>
+        public event Action? ShowStepsClicked;
+
+        /// <summary>
         /// Outliers as string
         /// </summary>
         public string Outliers
@@ -84,6 +89,7 @@ namespace Wpf_OutliersCalculator.ViewModels
         {
             CalculateCommand = new QDixonCommand(Calculate);
             ResetCommand = new QDixonCommand(Reset);
+            ShowStepsCommand = new QDixonCommand(ShowSteps);
             ShowCriticalTableCommand = new QDixonCommand(ShowCriticalTable);
         }
 
@@ -96,6 +102,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// Command to reset the QDixon data
         /// </summary>
         public QDixonCommand ResetCommand { get; private set; }
+
+        /// <summary>
+        /// Command to show the QDixon steps
+        /// </summary>
+        public QDixonCommand ShowStepsCommand { get; private set; }
 
         /// <summary>
         /// Command to show the critical table
@@ -153,6 +164,15 @@ namespace Wpf_OutliersCalculator.ViewModels
             modelQDixon = null;
             InputDataSet = string.Empty;
             PropertyChanges();
+        }
+
+
+        /// <summary>
+        /// Shows the steps to the QDixon
+        /// </summary>
+        private void ShowSteps()
+        {
+            ShowStepsClicked?.Invoke();
         }
 
 

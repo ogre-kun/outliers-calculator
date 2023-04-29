@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Wpf_OutliersCalculator.ViewModels
 {
-    public class QDixonViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
         private QDixon? modelQDixon = null;
 
@@ -15,6 +15,18 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// QDixon object as model
         /// </summary>
         public QDixon? ModelQDixon => modelQDixon;
+
+
+        public Dictionary<int, decimal> UserCritical { get; private set; } = null;
+
+        /// <summary>
+        /// Updates the user crit table
+        /// </summary>
+        /// <param name="userCritTable"></param>
+        public void UpdateUserCritTable(Dictionary<int, decimal> userCritTable)
+        {
+            UserCritical = userCritTable;
+        }
 
         /// <summary>
         /// Data set as input in the view
@@ -95,7 +107,7 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// <summary>
         /// Default constructor
         /// </summary>
-        public QDixonViewModel()
+        public MainWindowViewModel()
         {
             CalculateCommand = new QDixonCommand(Calculate);
             ResetCommand = new QDixonCommand(Reset);
@@ -163,7 +175,10 @@ namespace Wpf_OutliersCalculator.ViewModels
             try
             {
                 var dataList = ConvertInput();
-                modelQDixon = new QDixon(dataList);
+                if(UserCritical != null)
+                    modelQDixon = new QDixon(dataList, UserCritical);
+                else
+                    modelQDixon = new QDixon(dataList);
                 PropertyChanges();
             }
             catch (Exception e)
@@ -179,6 +194,7 @@ namespace Wpf_OutliersCalculator.ViewModels
         {
             modelQDixon = null;
             InputDataSet = string.Empty;
+            UserCritical = null;
             PropertyChanges();
         }
 
@@ -221,6 +237,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CritTableButtonEnabled)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputDataSet)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PlotButtonEnabled)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UserCritical)));
         }
 
         /// <summary>

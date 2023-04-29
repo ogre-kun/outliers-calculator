@@ -10,7 +10,7 @@
         Title="Outliers Calculator" Height="450" Width="450" Background="#F5F5F5">
 
     <Window.Resources>
-        <viewmodels:QDixonViewModel x:Key="QDixonVM"/>
+        <viewmodels:MainWindowViewModel x:Key="QDixonVM"/>
         <Style x:Key="NoFocusBorderTextBox" TargetType="{x:Type TextBox}">
             <Setter Property="Template">
                 <Setter.Value>

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -79,6 +77,27 @@ namespace Wpf_OutliersCalculator.ViewModels
             outliers?.ForEach(x => OGPoints.Add(new data_point(x, true)));
             newSet.ForEach(x => OGPoints.Add(new data_point(x, false)));
 
+            var OGAverage = Math.Round(OGPoints.Select(x => x.value).Average(), 2);
+            var NewAverage = Math.Round(newSet.Average(), 2);
+
+            //Define horizontal series from the data averages
+            var horizontalOGAverage = new LineSeries
+            {
+                Color = OxyColors.Green,
+                LineStyle = LineStyle.Dash,
+                StrokeThickness = 1,
+                Points = { new DataPoint(0, (double)OGAverage), 
+                    new DataPoint(OGPoints.Count + 1, (double)OGAverage) }
+            };
+            var horizontalNewAverage = new LineSeries
+            {
+                Color = OxyColors.Green,
+                LineStyle = LineStyle.Dash,
+                StrokeThickness = 1,
+                Points = { new DataPoint(0, (double)NewAverage), 
+                    new DataPoint(newSet.Count + 1, (double)NewAverage) }
+            };
+
             //Sort the original points
             OGPoints = OGPoints.OrderBy(point => point.value).ToList();
 
@@ -98,6 +117,10 @@ namespace Wpf_OutliersCalculator.ViewModels
             OriginalPlotModel.Series.Add(OutlierSeries);
             OriginalPlotModel.Series.Add(NewSetSeries);
             NewPlotModel.Series.Add(NewSetSeriesCopy);
+
+            //Add the horizontal data series
+            OriginalPlotModel.Series.Add(horizontalOGAverage);
+            NewPlotModel.Series.Add(horizontalNewAverage);
         }
     }
 }

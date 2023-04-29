@@ -22,5 +22,10 @@
             N = n;
             Value = value;
         }
+
+        /// <summary>
+        /// Parameterless contructor
+        /// </summary>
+        public QDixonCriticalTableRow() {}
     }
 }

@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using Wpf_OutliersCalculator.Helpers;
+using Wpf_OutliersCalculator.ViewModels;
 
 namespace Wpf_OutliersCalculator.Views
 {
@@ -7,9 +11,51 @@ namespace Wpf_OutliersCalculator.Views
     /// </summary>
     public partial class QDixonCritTable : Window
     {
-        public QDixonCritTable()
+        /// <summary>
+        /// Event when critical table user is updated
+        /// </summary>
+        public event Action<Dictionary<int, decimal>> CriticalTableUserUpdated;
+
+        /// <summary>
+        /// Reference to the viewmodel of this window
+        /// </summary>
+        public QDixonCriticalTableViewModel ViewModel { get; private set; }
+
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="viewmodel"></param>
+        public QDixonCritTable(QDixonCriticalTableViewModel viewmodel)
         {
+            ViewModel = viewmodel;
+            ViewModel.SaveButtonClicked += ViewModel_SaveButtonClicked;
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Callback when save button is clicked
+        /// </summary>
+        private void ViewModel_SaveButtonClicked()
+        {
+            //Create the new dictionary
+            Dictionary<int, decimal> newCritTableDictionary = new();
+            foreach(var item in DataG.Items)
+            {
+                int N;
+                try
+                {
+                    var n = ((QDixonCriticalTableRow)item).N;
+                    int.TryParse(n, out N);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+                decimal.TryParse(((QDixonCriticalTableRow)item).Value, out decimal Value);
+                newCritTableDictionary.Add(N, Value);
+            }
+            CriticalTableUserUpdated?.Invoke(newCritTableDictionary);
         }
     }
 }

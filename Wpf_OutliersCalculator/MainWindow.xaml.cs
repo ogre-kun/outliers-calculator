@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using Lib_OutliersCalculator;
+using System.Collections.Generic;
+using System.Windows;
 using Wpf_OutliersCalculator.ViewModels;
 using Wpf_OutliersCalculator.Views;
 
@@ -9,22 +11,24 @@ namespace Wpf_OutliersCalculator
     /// </summary>
     public partial class MainWindow : Window
     {
-        private QDixonViewModel? qdixonVM;
+        private MainWindowViewModel? mainWindowVM;
         private QDixonCriticalTableViewModel? qdixonCriticalTableVM;
         private QDixonStepsViewModel? qdixonStepsVM;
         private QDixonPlotViewModel? qdixonPlotVM;
+
+        private Dictionary<int, decimal>? userSuppliedCritTable = null;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            qdixonVM = this.Resources["QDixonVM"] as QDixonViewModel;
-            if(qdixonVM != null)
+            mainWindowVM = this.Resources["QDixonVM"] as MainWindowViewModel;
+            if(mainWindowVM != null)
             {
-                qdixonVM.ErrorOccurred += ViewModel_ErrorOccurred;
-                qdixonVM.ShowCriticalTableClicked += ViewModel_ShowCriticalTableClicked;
-                qdixonVM.ShowStepsClicked += ViewModel_ShowStepsTableClicked;
-                qdixonVM.ShowPlotClicked += ViewModel_ShowPlotClicked;
+                mainWindowVM.ErrorOccurred += ViewModel_ErrorOccurred;
+                mainWindowVM.ShowCriticalTableClicked += ViewModel_ShowCriticalTableClicked;
+                mainWindowVM.ShowStepsClicked += ViewModel_ShowStepsTableClicked;
+                mainWindowVM.ShowPlotClicked += ViewModel_ShowPlotClicked;
             }
         }
 
@@ -43,12 +47,12 @@ namespace Wpf_OutliersCalculator
         /// </summary>
         private void ViewModel_ShowCriticalTableClicked()
         {
-            var critTableWindow = new QDixonCritTable
+            var critTable = mainWindowVM?.ModelQDixon?.CriticalTable;
+            qdixonCriticalTableVM = new QDixonCriticalTableViewModel(critTable);
+            var critTableWindow = new QDixonCritTable(qdixonCriticalTableVM)
             {
                 Owner = this
             };
-            var critTable = qdixonVM?.ModelQDixon?.CriticalTable;
-
 
             //Set location of crit table window
             double offsetX = 0;
@@ -56,8 +60,9 @@ namespace Wpf_OutliersCalculator
             critTableWindow.Left = offsetX + this.Left + this.Width;
             critTableWindow.Top = offsetY + this.Top;
 
-            qdixonCriticalTableVM = new QDixonCriticalTableViewModel(critTable);
             critTableWindow.DataG.ItemsSource = qdixonCriticalTableVM.CriticalValueTable;
+            critTableWindow.DataContext = qdixonCriticalTableVM;
+            critTableWindow.CriticalTableUserUpdated += ViewModel_UserCritTableUpdated;
 
             //Open window as modal
             critTableWindow.ShowDialog();
@@ -73,7 +78,7 @@ namespace Wpf_OutliersCalculator
             {
                 Owner = this
             };
-            var steps = qdixonVM?.ModelQDixon?.Steps;
+            var steps = mainWindowVM?.ModelQDixon?.Steps;
 
             //Set location of crit table window
             double offsetX = 0;
@@ -96,8 +101,8 @@ namespace Wpf_OutliersCalculator
             {
                 Owner = this
             };
-            var outliers = qdixonVM?.ModelQDixon?.Outliers;
-            var newset = qdixonVM?.ModelQDixon?.SortedFinalSet;
+            var outliers = mainWindowVM?.ModelQDixon?.Outliers;
+            var newset = mainWindowVM?.ModelQDixon?.SortedFinalSet;
             qdixonPlotVM = new QDixonPlotViewModel(outliers, newset);
             plotWindow.DataContext = qdixonPlotVM;
 
@@ -108,6 +113,16 @@ namespace Wpf_OutliersCalculator
             plotWindow.Top = offsetY + this.Top;
 
             plotWindow.ShowDialog();
+        }
+
+        /// <summary>
+        /// Handles when user critical table has been supplied
+        /// </summary>
+        /// <param name="newTable">user supplied critical table</param>
+        private void ViewModel_UserCritTableUpdated(Dictionary<int, decimal> newTable)
+        {
+            mainWindowVM?.ModelQDixon?.UpdateCritTable(newTable);
+            mainWindowVM?.UpdateUserCritTable(newTable);
         }
     }
 }

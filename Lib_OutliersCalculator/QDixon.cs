@@ -6,6 +6,7 @@
         private decimal[] data_array_sorted;
         private int data_count;
         private Dictionary<int, decimal> criticalvalue_table;
+        private bool IsCritTableUserSupplied = true;
         private static Dictionary<int, decimal> default_crittable = new Dictionary<int, decimal>()
         {
             { 3 , 0.970m },
@@ -20,6 +21,20 @@
             { 12 , 0.479m },
             { 13 , 0.611m },
         };
+
+        /// <summary>
+        /// User defined critical table
+        /// </summary>
+        public Dictionary<int, decimal>? UserCritTable { get; private set; } = null;
+
+        /// <summary>
+        /// Update the user critical table
+        /// </summary>
+        /// <param name="table"></param>
+        public void UpdateCritTable(Dictionary<int, decimal> table)
+        {
+            UserCritTable = table;
+        }
 
         /// <summary>
         /// The steps performed for the Q-Dixon analysis
@@ -38,7 +53,9 @@
         { 
             get
             {
-                return default_crittable;
+                if(UserCritTable == null)
+                    return default_crittable;
+                return UserCritTable;
             }
         }
 
@@ -76,7 +93,10 @@
         /// QDixon constructor that uses the default critical table
         /// </summary>
         /// <param name="data">the list of data</param>
-        public QDixon(List<decimal> data) : this(data, default_crittable) { }
+        public QDixon(List<decimal> data) : this(data, default_crittable) 
+        {
+            IsCritTableUserSupplied = false;
+        }
 
         /// <summary>
         /// QDixon constructor
@@ -96,6 +116,10 @@
             data_array = data.ToArray();
             data_array_sorted = data.OrderBy(x => x).ToArray<decimal>();
             criticalvalue_table = critvalue_table;
+            if(IsCritTableUserSupplied)
+            {
+                UserCritTable = critvalue_table;
+            }
             data_count = data.Count();
 
             //Execute the QDixon test

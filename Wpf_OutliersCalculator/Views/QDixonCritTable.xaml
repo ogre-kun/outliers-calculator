@@ -6,13 +6,37 @@
         xmlns:local="clr-namespace:Wpf_OutliersCalculator.Views"
         xmlns:viewmodel="clr-namespace:Wpf_OutliersCalculator.ViewModels"
         mc:Ignorable="d"
-        Title="Critical Table" Height="450" Width="220">
+        Title="Critical Table" Height="450" Width="230">
     <Grid>
-        <DataGrid IsReadOnly="True" Margin="20" x:Name="DataG" AutoGenerateColumns="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="350"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="0" 
+                  IsReadOnly="{Binding IsDataGridReadOnly}" 
+                  CanUserAddRows="{Binding CanUserAddRows}" 
+                  Margin="10" x:Name="DataG" 
+                  AutoGenerateColumns="False"
+                  GridLinesVisibility="All"
+                  HorizontalAlignment="Left">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="N" Width="50" Binding="{Binding N}"/>
-                <DataGridTextColumn Header="Crit. Value" Width="90" Binding="{Binding Value}"/>                
+                <DataGridTextColumn Header="Crit. Value" Width="130" Binding="{Binding Value}"/>                
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="1" Margin="10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>                
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" Margin="2 2" IsEnabled="{Binding IsEditButtonEnabled}" Command="{Binding EditButtonCommand}">Edit</Button>
+            <Button Grid.Column="1" Grid.Row="0" Margin="2 2" IsEnabled="false">Load</Button>
+            <Button Grid.Column="0" Grid.Row="1" Margin="2 2" Command="{Binding SaveButtonCommand}">Save</Button>
+            <Button Grid.Column="1" Grid.Row="1" Margin="2 2" IsEnabled="false">Default</Button>
+        </Grid>
     </Grid>
 </Window>

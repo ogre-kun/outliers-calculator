@@ -12,6 +12,7 @@ namespace Wpf_OutliersCalculator
         private QDixonViewModel? qdixonVM;
         private QDixonCriticalTableViewModel? qdixonCriticalTableVM;
         private QDixonStepsViewModel? qdixonStepsVM;
+        private QDixonPlotViewModel? qdixonPlotVM;
 
         public MainWindow()
         {
@@ -23,6 +24,7 @@ namespace Wpf_OutliersCalculator
                 qdixonVM.ErrorOccurred += ViewModel_ErrorOccurred;
                 qdixonVM.ShowCriticalTableClicked += ViewModel_ShowCriticalTableClicked;
                 qdixonVM.ShowStepsClicked += ViewModel_ShowStepsTableClicked;
+                qdixonVM.ShowPlotClicked += ViewModel_ShowPlotClicked;
             }
         }
 
@@ -41,10 +43,12 @@ namespace Wpf_OutliersCalculator
         /// </summary>
         private void ViewModel_ShowCriticalTableClicked()
         {
-            var critTableWindow = new QDixonCritTable();
+            var critTableWindow = new QDixonCritTable
+            {
+                Owner = this
+            };
             var critTable = qdixonVM?.ModelQDixon?.CriticalTable;
 
-            critTableWindow.Owner = this;
 
             //Set location of crit table window
             double offsetX = 0;
@@ -65,10 +69,11 @@ namespace Wpf_OutliersCalculator
         /// </summary>
         private void ViewModel_ShowStepsTableClicked()
         {
-            var stepsWindow = new QDixonSteps();
+            var stepsWindow = new QDixonSteps
+            {
+                Owner = this
+            };
             var steps = qdixonVM?.ModelQDixon?.Steps;
-
-            stepsWindow.Owner = this;
 
             //Set location of crit table window
             double offsetX = 0;
@@ -80,6 +85,29 @@ namespace Wpf_OutliersCalculator
             stepsWindow.StepsTable.ItemsSource = qdixonStepsVM.StepsTable.DefaultView;
 
             stepsWindow.ShowDialog();
+        }
+
+        /// <summary>
+        /// Opens a new window to show the plot
+        /// </summary>
+        private void ViewModel_ShowPlotClicked()
+        {
+            var plotWindow = new QDixonPlot
+            {
+                Owner = this
+            };
+            var outliers = qdixonVM?.ModelQDixon?.Outliers;
+            var newset = qdixonVM?.ModelQDixon?.SortedFinalSet;
+            qdixonPlotVM = new QDixonPlotViewModel(outliers, newset);
+            plotWindow.DataContext = qdixonPlotVM;
+
+            //Set location of crit table window
+            double offsetX = 0;
+            double offsetY = 0;
+            plotWindow.Left = offsetX + this.Left + this.Width;
+            plotWindow.Top = offsetY + this.Top;
+
+            plotWindow.ShowDialog();
         }
     }
 }

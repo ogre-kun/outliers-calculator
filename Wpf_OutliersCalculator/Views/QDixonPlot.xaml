@@ -1,0 +1,20 @@
+﻿<Window x:Class="Wpf_OutliersCalculator.Views.QDixonPlot"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wpf_OutliersCalculator.Views"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        mc:Ignorable="d"
+        Title="Plot" Height="450" Width="600">
+    <Grid>
+        <TabControl Margin="10">
+            <TabItem Header="Original" Width="75">
+                <oxy:PlotView Model="{Binding OriginalPlotModel}"/>
+            </TabItem>
+            <TabItem Header="Excluding" Width="75">
+                <oxy:PlotView Model="{Binding NewPlotModel}"/>
+            </TabItem>            
+        </TabControl>
+    </Grid>
+</Window>

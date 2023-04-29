@@ -53,6 +53,11 @@
         public List<decimal>? SortedFinalSet { get; private set; } = null;
 
         /// <summary>
+        /// The original data set, sorted and as a list
+        /// </summary>
+        public List<decimal>? SortedDataSet => data_array_sorted.ToList<decimal>();
+
+        /// <summary>
         /// Final average of the sorted final set
         /// </summary>
         public decimal FinalAverage 

@@ -42,6 +42,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         public event Action? ShowStepsClicked;
 
         /// <summary>
+        /// Raised event when the button to show plot is clicked
+        /// </summary>
+        public event Action? ShowPlotClicked;
+
+        /// <summary>
         /// Outliers as string
         /// </summary>
         public string Outliers
@@ -63,6 +68,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// Whether to enable or disable the Critical Table button
         /// </summary>
         public bool CritTableButtonEnabled => modelQDixon != null;
+
+        /// <summary>
+        /// Whether the plot button is disabled or enabled
+        /// </summary>
+        public bool PlotButtonEnabled => modelQDixon != null;
 
         /// <summary>
         /// Average of the new data set;
@@ -91,6 +101,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             ResetCommand = new QDixonCommand(Reset);
             ShowStepsCommand = new QDixonCommand(ShowSteps);
             ShowCriticalTableCommand = new QDixonCommand(ShowCriticalTable);
+            ShowPlotCommand = new QDixonCommand(ShowPlot);
         }
 
         /// <summary>
@@ -114,6 +125,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         public QDixonCommand ShowCriticalTableCommand { get; private set; }
 
         /// <summary>
+        /// Command to show the plot
+        /// </summary>
+        public QDixonCommand ShowPlotCommand { get; private set; }
+
+        /// <summary>
         /// Convert the data in the input text box to list of decimal for consumption of the QDixon calculator
         /// </summary>
         /// <returns></returns>
@@ -135,7 +151,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             }
             catch (Exception e)
             {
-                throw new Exception("Input data error.");
+                throw new Exception("Input data error. Separate individual data with EITHER spaces or commas only.");
             }        
         }
 
@@ -175,6 +191,14 @@ namespace Wpf_OutliersCalculator.ViewModels
             ShowStepsClicked?.Invoke();
         }
 
+        /// <summary>
+        /// Raises the ShowPlot button clicked event
+        /// </summary>
+        private void ShowPlot()
+        {
+            ShowPlotClicked?.Invoke();
+        }
+
 
         /// <summary>
         /// Error occurred event handler
@@ -196,6 +220,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NewDataSetAverage)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CritTableButtonEnabled)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputDataSet)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PlotButtonEnabled)));
         }
 
         /// <summary>

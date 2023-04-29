@@ -7,7 +7,7 @@
         xmlns:viewmodels="clr-namespace:Wpf_OutliersCalculator.ViewModels"
         mc:Ignorable="d"
         Icon="Icons/outlier.ico"
-        Title="Outliers Calculator" Height="450" Width="400" Background="#F5F5F5">
+        Title="Outliers Calculator" Height="450" Width="450" Background="#F5F5F5">
 
     <Window.Resources>
         <viewmodels:QDixonViewModel x:Key="QDixonVM"/>
@@ -38,9 +38,9 @@
             <ColumnDefinition Width="20"/>            
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="7*"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
         <TabControl Grid.Row="1" Grid.Column="1">
             <TabItem Header="Q-Dixon" Width="75" DataContext="{StaticResource QDixonVM}">
@@ -94,16 +94,15 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>                            
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Margin="5 10 5 10" Command="{Binding CalculateCommand}">Calculate</Button>
                         <Button Grid.Column="1" Margin="5 10 5 10" IsEnabled="{Binding StepsEnabled}" Command="{Binding ShowStepsCommand}">Steps</Button>
-                        <Button Grid.Column="2" Margin="5 10 5 10" IsEnabled="{Binding CritTableButtonEnabled}" Command="{Binding ShowCriticalTableCommand}">Critical Table</Button>
-                        <Button Grid.Column="3" Margin="5 10 5 10" Command="{Binding ResetCommand}">Reset</Button>                        
+                        <Button Grid.Column="2" Margin="5 10 5 10" IsEnabled="{Binding CritTableButtonEnabled}" Command="{Binding ShowCriticalTableCommand}">Crit. Table</Button>
+                        <Button Grid.Column="3" Margin="5 10 5 10" IsEnabled="{Binding CritTableButtonEnabled}" Command="{Binding ResetCommand}">Reset</Button>
+                        <Button Grid.Column="4" Margin="5 10 5 10" IsEnabled="{Binding PlotButtonEnabled}" Command="{Binding ShowPlotCommand}">Plot</Button>
                     </Grid>
                 </Grid>
-            </TabItem>
-            <TabItem Header="IQR" Width="75">
-               
             </TabItem>
         </TabControl>
     </Grid>

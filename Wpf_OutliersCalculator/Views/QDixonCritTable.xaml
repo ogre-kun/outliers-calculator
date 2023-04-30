@@ -34,9 +34,9 @@
                 <RowDefinition Height="*"/>                
             </Grid.RowDefinitions>
             <Button Grid.Column="0" Grid.Row="0" Margin="2 2" IsEnabled="{Binding IsEditButtonEnabled}" Command="{Binding EditButtonCommand}">Edit</Button>
-            <Button Grid.Column="1" Grid.Row="0" Margin="2 2" IsEnabled="false">Load</Button>
-            <Button Grid.Column="0" Grid.Row="1" Margin="2 2" Command="{Binding SaveButtonCommand}">Save</Button>
-            <Button Grid.Column="1" Grid.Row="1" Margin="2 2" IsEnabled="false">Default</Button>
+            <!--<Button Grid.Column="1" Grid.Row="0" Margin="2 2" IsEnabled="false">Load</Button>-->
+            <Button Grid.Column="1" Grid.Row="0" Margin="2 2" Command="{Binding SaveButtonCommand}">Save</Button>
+            <!--<Button Grid.Column="1" Grid.Row="1" Margin="2 2" IsEnabled="false">Default</Button>-->
         </Grid>
     </Grid>
 </Window>

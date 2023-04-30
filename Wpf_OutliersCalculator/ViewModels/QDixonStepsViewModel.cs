@@ -9,17 +9,33 @@ using System;
 
 namespace Wpf_OutliersCalculator.ViewModels
 {
+
+    /// <summary>
+    /// View model for the QDixonSteps window
+    /// </summary>
     public class QDixonStepsViewModel
     {
+        /// <summary>
+        /// Reference to the DataTable
+        /// </summary>
         public DataTable StepsTable { get; private set; } = new();
 
+        /// <summary>
+        /// Constructor for the view model
+        /// </summary>
+        /// <param name="steps">list of QDixonStep</param>
         public QDixonStepsViewModel(List<QDixonStep> steps)
         {
             GenerateStepsTable(steps);
         }
 
+        /// <summary>
+        /// Generate the QDixon Steps data table for the list of QDixon steps
+        /// </summary>
+        /// <param name="steps">QDixonStep, contains details about the performed QDixon step</param>
         private void GenerateStepsTable(List<QDixonStep> steps)
         {
+            //Add column and each of their headers and types
             StepsTable.Columns.Add("Step No", typeof(int));
             StepsTable.Columns.Add("Crit Value", typeof(decimal));
             StepsTable.Columns.Add("Low Test", typeof(decimal));
@@ -29,6 +45,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             StepsTable.Columns.Add("N", typeof(int));
             StepsTable.Columns.Add("Outliers", typeof(string));
 
+            //Add rows to the step table
             int i = 1;
             foreach(var step in steps)
             {

@@ -7,6 +7,9 @@ using System.ComponentModel;
 
 namespace Wpf_OutliersCalculator.ViewModels
 {
+    /// <summary>
+    /// Main window view model
+    /// </summary>
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private QDixon? modelQDixon = null;
@@ -16,7 +19,9 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// </summary>
         public QDixon? ModelQDixon => modelQDixon;
 
-
+        /// <summary>
+        /// The user supplied critical table, initially set to null
+        /// </summary>
         public Dictionary<int, decimal> UserCritical { get; private set; } = null;
 
         /// <summary>

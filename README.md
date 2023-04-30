@@ -1,4 +1,4 @@
-# Outliers_Calculator
+# Outliers Calculator
 
 This is a small project I did to learn WPF and the MVVM pattern.
 My goal was to create a small application wherein I can put a small data set and automatically determine the outliers using the Q-Dixon method.

@@ -64,8 +64,6 @@ namespace Wpf_OutliersCalculator
             };
 
             //Set location of crit table window
-            double NEW_WINDOW_OFFSET_X = 0;
-            double NEW_WINDOW_OFFSET_Y = 0;
             critTableWindow.Left = NEW_WINDOW_OFFSET_X + this.Left + this.Width;
             critTableWindow.Top = NEW_WINDOW_OFFSET_Y + this.Top;
 
@@ -90,8 +88,6 @@ namespace Wpf_OutliersCalculator
             var steps = mainWindowVM?.ModelQDixon?.Steps;
 
             //Set location of crit table window
-            double NEW_WINDOW_OFFSET_X = 0;
-            double NEW_WINDOW_OFFSET_Y = 0;
             stepsWindow.Left = NEW_WINDOW_OFFSET_X + this.Left + this.Width;
             stepsWindow.Top = NEW_WINDOW_OFFSET_Y + this.Top;
 
@@ -117,8 +113,6 @@ namespace Wpf_OutliersCalculator
             plotWindow.DataContext = qdixonPlotVM;
 
             //Set location of crit table window
-            double NEW_WINDOW_OFFSET_X = 0;
-            double NEW_WINDOW_OFFSET_Y = 0;
             plotWindow.Left = NEW_WINDOW_OFFSET_X + this.Left + this.Width;
             plotWindow.Top = NEW_WINDOW_OFFSET_Y + this.Top;
 

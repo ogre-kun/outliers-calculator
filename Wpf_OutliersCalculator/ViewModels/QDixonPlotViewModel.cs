@@ -7,6 +7,9 @@ using OxyPlot.Series;
 
 namespace Wpf_OutliersCalculator.ViewModels
 {
+    /// <summary>
+    /// View model for the QDixon Plot window
+    /// </summary>
     public class QDixonPlotViewModel
     {
         /// <summary>
@@ -19,6 +22,11 @@ namespace Wpf_OutliersCalculator.ViewModels
         /// </summary>
         public PlotModel NewPlotModel { get; private set; } = new PlotModel { Title = "New Set" };
 
+        /// <summary>
+        /// Constructor for the QDixon Plot View Model
+        /// </summary>
+        /// <param name="outliers"></param>
+        /// <param name="newSet"></param>
         public QDixonPlotViewModel(List<decimal> outliers, List<decimal> newSet)
         {
             CreatePlotModels(outliers, newSet);
@@ -45,6 +53,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             NewPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = "Position" });
             NewPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = "Data Value" });
 
+            //Create 3 series, for the outliers and new data
             var OutlierSeries = new ScatterSeries
             {
                 MarkerType = MarkerType.Cross,
@@ -77,6 +86,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             outliers?.ForEach(x => OGPoints.Add(new data_point(x, true)));
             newSet.ForEach(x => OGPoints.Add(new data_point(x, false)));
 
+            //Calculate the averages which is to be shown as a horizontal line in the scatter plot areas
             var OGAverage = Math.Round(OGPoints.Select(x => x.value).Average(), 2);
             var NewAverage = Math.Round(newSet.Average(), 2);
 
@@ -101,6 +111,7 @@ namespace Wpf_OutliersCalculator.ViewModels
             //Sort the original points
             OGPoints = OGPoints.OrderBy(point => point.value).ToList();
 
+            //Add the scatter points to each of the series, number each point in order that they appear (i & j) in the plot
             int i = 1, j = 1;
             foreach (var ogpoint in  OGPoints)
             {
@@ -116,6 +127,8 @@ namespace Wpf_OutliersCalculator.ViewModels
             //Place the outliers and the new set series in a plot
             OriginalPlotModel.Series.Add(OutlierSeries);
             OriginalPlotModel.Series.Add(NewSetSeries);
+
+            //Add the new set series in the new plot model
             NewPlotModel.Series.Add(NewSetSeriesCopy);
 
             //Add the horizontal data series

@@ -1,12 +1,23 @@
 ﻿namespace Lib_OutliersCalculator
 {
+    /// <summary>
+    /// Encapsulates all the functions for a set of data to be analyzed with the QDixon method of removing outliers
+    /// </summary>
     public class QDixon
     {
         private decimal[] data_array;
         private decimal[] data_array_sorted;
         private int data_count;
         private Dictionary<int, decimal> criticalvalue_table;
+        
+        /// <summary>
+        /// Flag for when a critical table was supplied by the user
+        /// </summary>
         private bool IsCritTableUserSupplied = true;
+
+        /// <summary>
+        /// The default critical value table
+        /// </summary>
         private static Dictionary<int, decimal> default_crittable = new Dictionary<int, decimal>()
         {
             { 3 , 0.970m },
@@ -113,9 +124,12 @@
             if (critvalue_table.ContainsKey(data.Count) == false)
                 throw new ArgumentException($"Critical value table does not contain entry for count of input data ({data.Count})");
 
+            //Convert to arrays
             data_array = data.ToArray();
             data_array_sorted = data.OrderBy(x => x).ToArray<decimal>();
             criticalvalue_table = critvalue_table;
+
+            //Determine which version of the critical value table to be used
             if(IsCritTableUserSupplied)
             {
                 UserCritTable = critvalue_table;

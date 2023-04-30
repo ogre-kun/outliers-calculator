@@ -1,5 +1,8 @@
 ﻿namespace Wpf_OutliersCalculator.Helpers
 {
+    /// <summary>
+    /// Class for the row of the QDixon critical table
+    /// </summary>
     public class QDixonCriticalTableRow
     {
         /// <summary>

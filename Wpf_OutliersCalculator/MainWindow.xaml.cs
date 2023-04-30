@@ -1,5 +1,7 @@
 ﻿using Lib_OutliersCalculator;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection.Metadata;
 using System.Windows;
 using Wpf_OutliersCalculator.ViewModels;
 using Wpf_OutliersCalculator.Views;
@@ -11,13 +13,20 @@ namespace Wpf_OutliersCalculator
     /// </summary>
     public partial class MainWindow : Window
     {
+#region Private Members
+        private const double NEW_WINDOW_OFFSET_X = 0;
+        private const double NEW_WINDOW_OFFSET_Y = 0;
+
         private MainWindowViewModel? mainWindowVM;
         private QDixonCriticalTableViewModel? qdixonCriticalTableVM;
         private QDixonStepsViewModel? qdixonStepsVM;
         private QDixonPlotViewModel? qdixonPlotVM;
-
         private Dictionary<int, decimal>? userSuppliedCritTable = null;
+#endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -55,16 +64,16 @@ namespace Wpf_OutliersCalculator
             };
 
             //Set location of crit table window
-            double offsetX = 0;
-            double offsetY = 0;
-            critTableWindow.Left = offsetX + this.Left + this.Width;
-            critTableWindow.Top = offsetY + this.Top;
+            double NEW_WINDOW_OFFSET_X = 0;
+            double NEW_WINDOW_OFFSET_Y = 0;
+            critTableWindow.Left = NEW_WINDOW_OFFSET_X + this.Left + this.Width;
+            critTableWindow.Top = NEW_WINDOW_OFFSET_Y + this.Top;
 
             critTableWindow.DataG.ItemsSource = qdixonCriticalTableVM.CriticalValueTable;
             critTableWindow.DataContext = qdixonCriticalTableVM;
             critTableWindow.CriticalTableUserUpdated += ViewModel_UserCritTableUpdated;
 
-            //Open window as modal
+            //Open window modally
             critTableWindow.ShowDialog();
         }
 
@@ -81,14 +90,15 @@ namespace Wpf_OutliersCalculator
             var steps = mainWindowVM?.ModelQDixon?.Steps;
 
             //Set location of crit table window
-            double offsetX = 0;
-            double offsetY = 0;
-            stepsWindow.Left = offsetX + this.Left + this.Width;
-            stepsWindow.Top = offsetY + this.Top;
+            double NEW_WINDOW_OFFSET_X = 0;
+            double NEW_WINDOW_OFFSET_Y = 0;
+            stepsWindow.Left = NEW_WINDOW_OFFSET_X + this.Left + this.Width;
+            stepsWindow.Top = NEW_WINDOW_OFFSET_Y + this.Top;
 
             qdixonStepsVM = new QDixonStepsViewModel(steps);
             stepsWindow.StepsTable.ItemsSource = qdixonStepsVM.StepsTable.DefaultView;
 
+            //Open steps window modally
             stepsWindow.ShowDialog();
         }
 
@@ -107,11 +117,12 @@ namespace Wpf_OutliersCalculator
             plotWindow.DataContext = qdixonPlotVM;
 
             //Set location of crit table window
-            double offsetX = 0;
-            double offsetY = 0;
-            plotWindow.Left = offsetX + this.Left + this.Width;
-            plotWindow.Top = offsetY + this.Top;
+            double NEW_WINDOW_OFFSET_X = 0;
+            double NEW_WINDOW_OFFSET_Y = 0;
+            plotWindow.Left = NEW_WINDOW_OFFSET_X + this.Left + this.Width;
+            plotWindow.Top = NEW_WINDOW_OFFSET_Y + this.Top;
 
+            //Open window modally
             plotWindow.ShowDialog();
         }
 
@@ -121,7 +132,10 @@ namespace Wpf_OutliersCalculator
         /// <param name="newTable">user supplied critical table</param>
         private void ViewModel_UserCritTableUpdated(Dictionary<int, decimal> newTable)
         {
+            //Update the critical table in the existing QDixon model 
             mainWindowVM?.ModelQDixon?.UpdateCritTable(newTable);
+
+            //Update the user critical table in the View Model
             mainWindowVM?.UpdateUserCritTable(newTable);
         }
     }

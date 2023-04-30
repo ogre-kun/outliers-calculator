@@ -1,5 +1,8 @@
 ﻿namespace Lib_OutliersCalculator
 {
+    /// <summary>
+    /// Class for each of the QDixon step done in the analysis
+    /// </summary>
     public class QDixonStep
     {
         /// <summary>

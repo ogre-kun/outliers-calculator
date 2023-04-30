@@ -6,6 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace Wpf_OutliersCalculator.ViewModels
 {
+    /// <summary>
+    /// View model for the QDixon Critical Table window
+    /// </summary>
     public class QDixonCriticalTableViewModel : INotifyPropertyChanged
     {
         private Dictionary<int, decimal> criticalValueTable;

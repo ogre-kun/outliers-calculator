@@ -40,6 +40,9 @@ namespace Wpf_OutliersCalculator.Views
         {
             //Create the new dictionary
             Dictionary<int, decimal> newCritTableDictionary = new();
+
+            //Converts all of the current item in the DataGrid (as updated by user) into a dictionary
+            //It is then passed on to a an event CriticalTableUserUpdated
             foreach(var item in DataG.Items)
             {
                 int N;
@@ -55,6 +58,7 @@ namespace Wpf_OutliersCalculator.Views
                 decimal.TryParse(((QDixonCriticalTableRow)item).Value, out decimal Value);
                 newCritTableDictionary.Add(N, Value);
             }
+            //Pass the new table to the event
             CriticalTableUserUpdated?.Invoke(newCritTableDictionary);
         }
     }
